@@ -25,15 +25,15 @@ const route = [
 ];
 
 const plans = [
-  { name: "Educativo", price: "USD 400–500", format: "Grupal, autoservicio guiado", duration: "6 semanas", processes: "A tu ritmo", support: "Comunidad + Q&A grupal", kpis: "No incluido", ideal: "Explorar antes de invertir más", cta: "Empezar aquí" },
-  { name: "Implementación", price: "USD 800–1,200", format: "Grupal + acompañamiento", duration: "6 semanas", processes: "2 procesos garantizados", support: "Office hours + asíncrono", kpis: "Incluido", ideal: "Pequeña empresa con leads entrantes", cta: "Quiero este", featured: true },
-  { name: "Premium", price: "USD 2,500–4,000", format: "1:1 con diagnóstico", duration: "8–12 semanas", processes: "A la medida", support: "Consultor asignado", kpis: "Incluido + personalizado", ideal: "Mediana empresa / mayor complejidad", cta: "Hablemos" },
+  { name: "Educativo", price: "USD 500", format: "Grupal, autoservicio guiado", duration: "6 semanas", processes: "A tu ritmo", support: "Comunidad + Q&A grupal", kpis: "No incluido", ideal: "Explorar antes de invertir más", cta: "Empezar aquí" },
+  { name: "Implementación", price: "USD 800", format: "Grupal + acompañamiento", duration: "6 semanas", processes: "2 procesos garantizados", support: "Office hours + asíncrono", kpis: "Incluido", ideal: "Pequeña empresa con leads entrantes", cta: "Quiero este", featured: true },
+  { name: "Premium", price: "USD 3,000", format: "1:1 con diagnóstico", duration: "8–12 semanas", processes: "A la medida", support: "Consultor asignado", kpis: "Incluido + personalizado", ideal: "Mediana empresa / mayor complejidad", cta: "Hablemos" },
 ];
 
 const faqs = [
   ["Es caro para mi empresa", "Compáralo con el costo de una contratación o con las horas que hoy se pierden en tareas repetitivas: te ayudamos a hacer esa cuenta en el diagnóstico. También puedes pagarlo hasta en 3 meses sin intereses."],
   ["¿Puedo pagarlo en partes?", "Sí. Aceptamos pago en una sola exhibición o hasta en 3 meses sin intereses (MSI) con tarjeta de crédito de consumo emitida en México, a través de Stripe."],
-  ["No tengo tiempo para esto", "Está diseñado para dueños ocupados: 3–4 horas por semana durante 8 semanas, no más."],
+  ["No tengo tiempo para esto", "Está diseñado para dueños ocupados: 3–4 horas por semana durante 6 semanas, no más."],
   ["Mi negocio es muy específico", "Trabajamos con plantillas por industria y un diagnóstico inicial antes de personalizar."],
   ["Mi equipo no lo va a usar", "Designamos a una persona campeona dentro de tu empresa y trabajamos la gestión del cambio como parte del programa."],
   ["¿Qué pasa con la privacidad de mis datos y los de mis clientes?", "El programa incluye un módulo de cumplimiento con la Ley Federal de Protección de Datos Personales vigente en México."],
