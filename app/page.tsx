@@ -56,7 +56,7 @@ export default function Home() {
   return <>
     <header className="nav-wrap">
       <nav className="nav shell" aria-label="Navegación principal">
-        <a className="brand" href="#inicio" aria-label="Digitalizados, inicio"><span>D</span> digitalizados</a>
+        <a className="brand" href="#inicio" aria-label="Digitalizados, inicio"><img src="/dgt-logo.png" alt="Digitalizados" /></a>
         <div className="nav-links"><a href="#programa">Programa</a><a href="#ruta">Ruta</a><a href="#niveles">Niveles</a><a href="#faq">FAQ</a></div>
         <Cta className="nav-cta">Diagnóstico gratis</Cta>
       </nav>
@@ -66,8 +66,7 @@ export default function Home() {
       <section className="hero" id="inicio">
         <div className="shell hero-grid">
           <div className="hero-copy">
-            <p className="eyebrow">UN PROGRAMA DE DIGITALIZADOS · 8 SEMANAS · SIN EQUIPO TÉCNICO</p>
-            <h1>Implementa IA en tu empresa en <em>6 semanas</em> y recupera las horas que hoy pierdes en tareas repetitivas</h1>
+            <h1>Implementa IA en tu empresa en <em>6 semanas</em></h1>
             <p className="lede">Un programa práctico —no un curso teórico— del medio que cubre IA y tecnología para LATAM todos los días. Sales con procesos funcionando y resultados medidos, no con una lista de ideas.</p>
             <div className="hero-actions"><Cta/><a className="text-link" href="#ruta">Ver cómo funciona <span>↓</span></a></div>
             <p className="payment-note">Paga en 1 sola exhibición o hasta en 3 meses sin intereses con tu tarjeta (Stripe).</p>
@@ -104,6 +103,6 @@ export default function Home() {
       <section className="final-cta"><div className="shell"><p className="eyebrow">EL MOMENTO ES AHORA. EL HYPE NO.</p><h2>Tu competencia ya está probando IA. La diferencia la va a hacer quién la implemente de verdad.</h2><p>Empieza con un diagnóstico gratuito de 20 minutos —sin compromiso. Paga en 1 sola exhibición o hasta en 3 meses sin intereses.</p><Cta>Agendar mi diagnóstico</Cta></div></section>
     </main>
 
-    <footer><div className="shell footer-grid"><div><a className="brand footer-brand" href="#inicio"><span>D</span> digitalizados</a><p>El medio de tecnología y negocios de LATAM.</p></div><div><h3>Programa</h3><a href="#programa">La diferencia</a><a href="#ruta">Cómo funciona</a><a href="#niveles">Niveles</a><a href="#faq">FAQ</a></div><div><h3>Digitalizados</h3><a href="#">Contacto</a><a href="#">Instagram</a><a href="#">LinkedIn</a></div><div><h3>Legal</h3><a href="#">Aviso de privacidad</a><p>Los resultados varían según la empresa; las cifras mostradas son estimaciones basadas en fuentes públicas y casos previos, no garantías.</p></div></div><div className="shell footer-bottom"><span>© 2026 Digitalizados</span><span>MSI sujeto a elegibilidad de tu tarjeta y términos de Stripe; monto mínimo y comisión pueden variar.</span></div></footer>
+    <footer><div className="shell footer-grid"><div><a className="brand footer-brand" href="#inicio"><img src="/dgt-logo.png" alt="Digitalizados" /></a><p>El medio de tecnología y negocios de LATAM.</p></div><div><h3>Programa</h3><a href="#programa">La diferencia</a><a href="#ruta">Cómo funciona</a><a href="#niveles">Niveles</a><a href="#faq">FAQ</a></div><div><h3>Digitalizados</h3><a href="#">Contacto</a><a href="#">Instagram</a><a href="#">LinkedIn</a></div><div><h3>Legal</h3><a href="#">Aviso de privacidad</a><p>Los resultados varían según la empresa; las cifras mostradas son estimaciones basadas en fuentes públicas y casos previos, no garantías.</p></div></div><div className="shell footer-bottom"><span>© 2026 Digitalizados</span><span>MSI sujeto a elegibilidad de tu tarjeta y términos de Stripe; monto mínimo y comisión pueden variar.</span></div></footer>
   </>;
 }
