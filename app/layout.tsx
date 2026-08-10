@@ -17,7 +17,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title,
     description,
-    icons: { icon: "/favicon.svg", shortcut: "/favicon.svg" },
+    icons: { icon: "/favicon.png", shortcut: "/favicon.png", apple: "/favicon.png" },
     openGraph: { title, description, type: "website", images: [{ url: `${origin}/og.png`, width: 1792, height: 921, alt: "IA que sí llega a producción — Digitalizados" }] },
     twitter: { card: "summary_large_image", title, description, images: [`${origin}/og.png`] },
   };
