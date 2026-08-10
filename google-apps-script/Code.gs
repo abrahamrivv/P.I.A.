@@ -1,9 +1,20 @@
-const SHEET_NAME = "Leads";
+const HEADERS = [
+  "Fecha", "Nombre", "Apellidos", "Correo empresarial", "Rol", "País",
+  "Teléfono", "Tamaño de empresa", "Empresa", "LinkedIn", "Cohort",
+  "Cómo nos conoció", "Mayor reto operativo",
+];
 
 function doPost(e) {
   const data = JSON.parse(e.postData.contents);
-  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME);
-  if (!sheet) throw new Error(`No existe la hoja ${SHEET_NAME}`);
+  const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+  if (!spreadsheet) throw new Error("Este script debe crearse desde Leads PIA");
+  const sheet = spreadsheet.getSheets()[0];
+
+  if (sheet.getLastRow() === 0) {
+    sheet.appendRow(HEADERS);
+    sheet.getRange(1, 1, 1, HEADERS.length).setFontWeight("bold");
+    sheet.setFrozenRows(1);
+  }
 
   sheet.appendRow([
     data.fecha || new Date().toISOString(),
