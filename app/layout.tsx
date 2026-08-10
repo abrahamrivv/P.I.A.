@@ -1,11 +1,6 @@
 import type { Metadata } from "next";
-import { Fraunces, Manrope, IBM_Plex_Mono } from "next/font/google";
 import { headers } from "next/headers";
 import "./globals.css";
-
-const display = Fraunces({ variable: "--font-display", subsets: ["latin"] });
-const sans = Manrope({ variable: "--font-sans", subsets: ["latin"] });
-const mono = IBM_Plex_Mono({ variable: "--font-mono", subsets: ["latin"], weight: ["400", "500", "600"] });
 
 export async function generateMetadata(): Promise<Metadata> {
   const requestHeaders = await headers();
@@ -24,5 +19,5 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="es"><body className={`${display.variable} ${sans.variable} ${mono.variable}`}>{children}</body></html>;
+  return <html lang="es"><body>{children}</body></html>;
 }
