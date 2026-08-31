@@ -7,8 +7,8 @@ export async function generateMetadata(): Promise<Metadata> {
   const host = requestHeaders.get("x-forwarded-host") ?? requestHeaders.get("host") ?? "localhost:5173";
   const protocol = requestHeaders.get("x-forwarded-proto") ?? (host.includes("localhost") ? "http" : "https");
   const origin = `${protocol}://${host}`;
-  const title = "Programa de IA para empresas | Digitalizados";
-  const description = "Implementa dos procesos de IA en tu empresa con acompañamiento, medición y enfoque práctico para PyMEs de LATAM.";
+  const title = "Implementación de IA para empresas en LATAM | Digitalizados";
+  const description = "Agencia que implementa IA en tu empresa: identificamos dónde se pierde tiempo y dinero, y dejamos procesos funcionando y medidos. México y LATAM.";
   return {
     title,
     description,
