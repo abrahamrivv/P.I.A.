@@ -17,6 +17,10 @@
 /.next/
 /.vinext/
 /out/
+*.tsbuildinfo
+
+# local editor / claude config
+/.claude/
 
 # misc
 .DS_Store
