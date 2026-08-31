@@ -19,5 +19,5 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="es"><body>{children}</body></html>;
+  return <html lang="es"><head><noscript><style>{`[data-reveal]{opacity:1 !important;transform:none !important}`}</style></noscript></head><body>{children}</body></html>;
 }
