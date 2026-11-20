@@ -169,7 +169,7 @@ export default function Home() {
           <h1 data-reveal style={delay(1, 60)}>Tu marketing, operado con IA. <em>Tu equipo, enfocado en vender.</em></h1>
           <p className="lede" data-reveal style={delay(2, 60)}>Somos Digitalizados, el medio de IA y tecnología de LATAM. Armamos y operamos con IA tu contenido, tus anuncios, la atención a clientes, el UGC y tu presencia web, y medimos qué te trae clientes.</p>
           <div className="hero-actions" data-reveal style={delay(3, 60)}>
-            <Cta>Agendar diagnóstico gratis (20 min)</Cta>
+            <Cta>Agendar diagnóstico gratis <span className="nw">(20 min)</span></Cta>
             <a className="button ghost" href="#como-trabajamos">Ver cómo trabajamos<span aria-hidden="true">↓</span></a>
           </div>
           <p className="microcopy" data-reveal style={delay(4, 60)}>Sin compromiso. Sin preparación técnica.</p>
