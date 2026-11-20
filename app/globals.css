@@ -225,9 +225,6 @@ html:not(.js) h2 em, h2.is-visible em { background-size: 100% 0.36em; }
   min-height: calc(100svh - var(--nav-h));
   padding: clamp(90px, 12vw, 150px) 0 clamp(80px, 10vw, 120px);
   text-align: center;
-  background-image: radial-gradient(rgba(0, 255, 200, 0.16) 1px, transparent 1.4px);
-  background-size: 26px 26px;
-  background-position: center;
 }
 .hero-glow {
   position: absolute;
