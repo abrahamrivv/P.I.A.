@@ -23,5 +23,5 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="es" className={`${display.variable} ${sans.variable}`}><head><noscript><style>{`[data-reveal][data-reveal]{opacity:1 !important;transform:none !important}`}</style></noscript></head><body>{children}</body></html>;
+  return <html lang="es" className={`${display.variable} ${sans.variable}`} suppressHydrationWarning><head><script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} /></head><body>{children}</body></html>;
 }
