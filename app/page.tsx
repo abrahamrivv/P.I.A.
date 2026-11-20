@@ -24,6 +24,15 @@ const services = [
   { icon: "web", name: "Websites y landing pages", text: "Presencia en internet y posicionamiento para que empieces a aparecer en buscadores.", receive: "sitio o landing publicados." },
 ];
 
+// Hero "department" pieces — labels come straight from the hero subtitle. fx/fy/fr = scattered start position.
+const team = [
+  { name: "Contenido", icon: "content", fx: "-260px", fy: "-150px", fr: "-14deg" },
+  { name: "Anuncios", icon: "ads", fx: "-120px", fy: "170px", fr: "9deg" },
+  { name: "Chatbots", icon: "chat", fx: "10px", fy: "-210px", fr: "-6deg" },
+  { name: "UGC", icon: "video", fx: "150px", fy: "180px", fr: "12deg" },
+  { name: "Web", icon: "web", fx: "280px", fy: "-130px", fr: "16deg" },
+];
+
 const steps = [
   { name: "Diagnóstico", text: "Revisamos tu marketing hoy: canales, tiempo, costos y qué ya funciona. Salimos con una línea base y una prioridad clara." },
   { name: "Montaje en 30 días", text: "Armamos y ponemos a correr lo priorizado. Tu lado designa a una persona responsable; del nuestro, un consultor asignado." },
@@ -276,19 +285,18 @@ export default function Home() {
       {/* 2. HERO */}
       <section className="hero band-dark" id="inicio">
         <div className="hero-glow" aria-hidden="true" />
-        <div className="orbit" aria-hidden="true">
-          <div className="ring r1">{["content", "ads", "chat"].map((n, i) => <span className="sat" key={n} style={{ "--a": `${i * 120 + 25}deg` } as CSSProperties}><span><Glyph name={n} /></span></span>)}</div>
-          <div className="ring r2">{["video", "web", "news", "play"].map((n, i) => <span className="sat" key={n} style={{ "--a": `${i * 90 + 60}deg` } as CSSProperties}><span><Glyph name={n} /></span></span>)}</div>
-        </div>
+        <div className="aurora" aria-hidden="true"><span /><span /></div>
         <div className="shell hero-inner">
-          <p className="badge rise">⚡ AI-powered Marketing · PyMEs y startups</p>
-          <h1 className="hero-title"><Split text="Tu marketing, operado con IA." em="Tu equipo, enfocado en vender." /></h1>
-          <p className="lede rise" style={{ animationDelay: "520ms" }}>Somos Digitalizados, el medio de IA y tecnología de LATAM. Armamos y operamos con IA tu contenido, tus anuncios, la atención a clientes, el UGC y tu presencia web, y medimos qué te trae clientes.</p>
-          <div className="hero-actions rise" style={{ animationDelay: "620ms" }}>
-            <Cta>Agendar diagnóstico gratis <span className="nw">(20 min)</span></Cta>
-            <a className="button ghost" href="#como-trabajamos"><span className="label">Ver cómo trabajamos</span><span aria-hidden="true">↓</span></a>
+          <h1 className="hero-title"><Split text="Tu departamento de marketing completo," em="operado con IA." /></h1>
+          <p className="lede rise" style={{ animationDelay: "480ms" }}>Contenido, anuncios, chatbots, UGC y web en un solo equipo, trabajando contigo desde el primer mes.</p>
+          {/* The department assembling: five pieces fly in, lock into one team, then a pulse runs through them */}
+          <div className="team" aria-hidden="true">
+            <span className="team-rail"><i /></span>
+            {team.map((t, i) => <span className="chip" key={t.name} style={{ "--i": i, "--fx": t.fx, "--fy": t.fy, "--fr": t.fr } as CSSProperties}><Glyph name={t.icon} />{t.name}</span>)}
           </div>
-          <p className="microcopy rise" style={{ animationDelay: "720ms" }}>Sin compromiso. Sin preparación técnica.</p>
+          <div className="hero-actions rise" style={{ animationDelay: "650ms" }}>
+            <Cta>Agendar diagnóstico gratis <span className="nw">(20 min)</span></Cta>
+          </div>
         </div>
       </section>
 

@@ -236,20 +236,6 @@ html:not(.js) h2 em, h2.is-visible em { background-size: 100% 0.36em; }
   pointer-events: none;
 }
 .hero-inner { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; max-width: 1000px; }
-.badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  margin: 0 0 28px;
-  padding: 9px 18px;
-  font: 600 0.82rem/1.4 var(--sans);
-  letter-spacing: 0.04em;
-  color: var(--mint);
-  border: 1px solid rgba(0, 255, 200, 0.42);
-  border-radius: 999px;
-  background: rgba(3, 61, 64, 0.7);
-  backdrop-filter: blur(6px);
-}
 .hero-title { max-width: 980px; }
 .hero-title em {
   color: var(--mint);
@@ -265,47 +251,56 @@ html:not(.js) h2 em, h2.is-visible em { background-size: 100% 0.36em; }
 @keyframes sweep { to { background-size: 100% 0.07em; } }
 .lede { font-size: clamp(1.05rem, 1.6vw, 1.24rem); color: #d3e9e6; max-width: 780px; margin: 28px auto 38px; }
 .hero-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; }
-.microcopy { margin: 20px 0 0; font-size: 0.9rem; color: #9fc0bc; }
 
-/* Orbiting service icons */
-.orbit { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
-.ring {
+/* Slow aurora behind the hero */
+.aurora { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+.aurora span { position: absolute; border-radius: 50%; filter: blur(90px); opacity: 0.55; }
+.aurora span:nth-child(1) { width: 620px; height: 420px; top: -12%; left: -8%; background: radial-gradient(closest-side, rgba(0, 255, 200, 0.55), transparent); animation: drift1 22s ease-in-out infinite; }
+.aurora span:nth-child(2) { width: 560px; height: 460px; bottom: -18%; right: -10%; background: radial-gradient(closest-side, rgba(0, 240, 255, 0.45), transparent); animation: drift2 26s ease-in-out infinite; }
+@keyframes drift1 { 50% { translate: 18vw 12vh; scale: 1.15; } }
+@keyframes drift2 { 50% { translate: -16vw -10vh; scale: 1.1; } }
+
+/* "Tu departamento completo": five pieces fly in, lock into one team, then a pulse runs through them */
+.team { position: relative; display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin: 6px auto 40px; padding: 14px 16px; }
+.team::before {
+  content: "";
   position: absolute;
-  left: 50%;
-  top: 50%;
-  width: var(--d);
-  height: var(--d);
-  margin: calc(var(--d) / -2) 0 0 calc(var(--d) / -2);
-  border: 1px solid rgba(0, 255, 200, 0.2);
-  border-radius: 50%;
-  animation: spin var(--dur) linear infinite;
+  inset: 0;
+  border: 1px solid rgba(0, 255, 200, 0.3);
+  border-radius: 999px;
+  background: rgba(2, 43, 46, 0.6);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 0 0 6px rgba(0, 255, 200, 0.05), 0 24px 60px -24px rgba(0, 255, 200, 0.5);
+  opacity: 0;
+  scale: 0.94;
+  animation: frameIn 0.7s var(--ease) 1.75s forwards;
 }
-.ring.r1 { --d: clamp(560px, 64vw, 880px); --dur: 70s; }
-.ring.r2 { --d: clamp(820px, 96vw, 1340px); --dur: 110s; border-style: dashed; border-color: rgba(0, 240, 255, 0.16); animation-direction: reverse; }
-.sat {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 54px;
-  height: 54px;
-  margin: -27px 0 0 -27px;
-  transform: rotate(var(--a)) translateY(calc(var(--d) / -2)) rotate(calc(var(--a) * -1));
+.team-rail { position: absolute; left: 44px; right: 44px; top: 50%; height: 2px; margin-top: -1px; overflow: hidden; background: rgba(0, 255, 200, 0.18); opacity: 0; animation: fadeIn 0.5s ease 1.95s forwards; }
+.team-rail i { position: absolute; top: 0; left: -30%; width: 30%; height: 100%; background: linear-gradient(90deg, transparent, var(--mint), transparent); animation: travel 2.6s ease-in-out 2.3s infinite; }
+.chip {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  color: #fff;
+  background: var(--teal);
+  border: 1px solid rgba(0, 255, 200, 0.38);
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  white-space: nowrap;
+  animation: chipIn 0.95s var(--ease) both;
+  animation-delay: calc(850ms + var(--i) * 95ms);
 }
-.sat > span {
-  display: grid;
-  place-items: center;
-  width: 100%;
-  height: 100%;
-  color: var(--mint);
-  background: rgba(4, 72, 75, 0.92);
-  border: 1px solid rgba(0, 255, 200, 0.45);
-  border-radius: 50%;
-  box-shadow: 0 0 0 6px rgba(0, 255, 200, 0.08), 0 10px 30px -6px rgba(0, 255, 200, 0.5);
-  animation: spin var(--dur) linear infinite reverse;
-}
-.r2 .sat > span { animation-direction: normal; }
-.sat svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-@keyframes spin { to { rotate: 360deg; } }
+.chip svg { width: 17px; height: 17px; fill: none; stroke: var(--mint); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.chip::after { content: ""; width: 7px; height: 7px; margin-left: 2px; border-radius: 50%; background: var(--mint); animation: ping 2.6s ease-out infinite; animation-delay: calc(2.3s + (var(--i) + 0.5) * 0.52s); }
+@keyframes chipIn { from { opacity: 0; translate: calc(var(--fx) * var(--k, 1)) calc(var(--fy) * var(--k, 1)); rotate: var(--fr); filter: blur(5px); } to { opacity: 1; translate: none; rotate: none; filter: none; } }
+@keyframes frameIn { to { opacity: 1; scale: 1; } }
+@keyframes fadeIn { to { opacity: 1; } }
+@keyframes travel { to { left: 100%; } }
+@keyframes ping { 0% { box-shadow: 0 0 0 0 rgba(0, 255, 200, 0.75); } 70%, 100% { box-shadow: 0 0 0 10px rgba(0, 255, 200, 0); } }
 
 /* ---------- Marquee ---------- */
 .marquee { overflow: hidden; color: var(--teal); background: var(--mint); border-block: 1px solid rgba(3, 61, 64, 0.15); }
@@ -762,11 +757,10 @@ footer.band-dark { padding: 64px 0 34px; font-size: 0.92rem; background: var(--t
   .nav-cta { padding: 10px 13px; font-size: 0.8rem; gap: 6px; }
   .menu-toggle { width: 40px; height: 40px; }
   .hero { min-height: auto; }
-  .ring.r1 { --d: 470px; }
-  .ring.r2 { display: none; }
-  .sat { width: 42px; height: 42px; margin: -21px 0 0 -21px; opacity: 0.45; }
-  .sat svg { width: 18px; height: 18px; }
-  .badge { font-size: 0.74rem; padding: 8px 14px; }
+  .team { --k: 0.45; gap: 8px; padding: 12px; margin-bottom: 32px; }
+  .team::before { border-radius: 26px; }
+  .team-rail { display: none; }
+  .chip { padding: 8px 12px; font-size: 0.82rem; }
   .hero-actions { flex-direction: column; align-items: stretch; width: 100%; }
   .marquee-item { font-size: 0.9rem; gap: 20px; }
   .section-head { margin-bottom: 40px; }
@@ -787,7 +781,9 @@ footer.band-dark { padding: 64px 0 34px; font-size: 0.92rem; background: var(--t
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .rise, .hero-title .w, .hero-title em, .ring, .sat > span, .marquee-track, .final-rings span { animation: none; }
+  .rise, .hero-title .w, .hero-title em, .chip, .chip::after, .team::before, .team-rail, .team-rail i, .aurora span, .marquee-track, .final-rings span { animation: none; }
+  .team::before { opacity: 1; scale: 1; }
+  .team-rail { opacity: 1; }
   .hero-title em { background-size: 100% 0.07em; }
   .js [data-reveal], .js .split .w { opacity: 1; translate: none; filter: none; transition: none; }
   h2 em { background-size: 100% 0.36em; transition: none; }
