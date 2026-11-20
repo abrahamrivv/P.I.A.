@@ -101,7 +101,7 @@ function Icon({ name }: { name: string }) {
 }
 
 function Cta({ children, className = "" }: { children: ReactNode; className?: string }) {
-  return <a className={`button ${className}`} href="#diagnostico">{children}<span aria-hidden="true">↗</span></a>;
+  return <a className={`button ${className}`} href="#diagnostico"><span className="label">{children}</span><span aria-hidden="true">↗</span></a>;
 }
 
 function delay(i: number, step = 70) {

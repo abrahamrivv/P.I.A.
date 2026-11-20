@@ -94,7 +94,8 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
 }
 .button:hover { transform: translateY(-2px); box-shadow: 0 12px 32px -10px rgba(0, 255, 200, 0.65); }
 .button span { font-size: 1.05em; }
-.button .nw { font-size: inherit; white-space: nowrap; }
+.button .label, .button .nw { font-size: inherit; }
+.button .nw { white-space: nowrap; }
 .button.ghost { background: transparent; color: var(--text); border-color: var(--line-2); }
 .button.ghost:hover { border-color: var(--cyan); box-shadow: none; }
 
