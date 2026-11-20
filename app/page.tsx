@@ -1,60 +1,111 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, ReactNode, useEffect, useState } from "react";
 
-const stats = [
-  { value: "44%", text: "de las PyMEs mexicanas ya probó una herramienta de IA, pero solo 19% la usa de forma sistemática", source: "Endeavor México / agentedigitalizado.com, 2026" },
-  { value: "+15%", text: "más casos resueltos por hora en atención al cliente con IA generativa", source: "Brynjolfsson, Li & Raymond, Quarterly Journal of Economics, 2025" },
-  { value: "−40%", text: "de tiempo en tareas de redacción, con +18% de calidad", source: "Noy & Zhang, Science, 2023" },
-  { value: "38.9%", text: "de los empresarios mexicanos dice que la falta de conocimiento es su principal freno para adoptar IA", source: "Alegra, Pulso Pymes LATAM, 2026" },
+const signals = [
+  { value: "44%", text: "de las PyMEs mexicanas probó IA; solo 19% la usa de forma sistemática.", source: "(Endeavor México, 2026)" },
+  { value: "−40%", text: "de tiempo en redacción y +18% de calidad con IA generativa.", source: "(Noy y Zhang, Science, 2023)" },
+  { value: "38.9%", text: "de los empresarios mexicanos dice que su principal freno es no saber cómo.", source: "(Alegra, 2026)" },
+];
+
+const pains = [
+  "Publicas cuando te acuerdas, no cuando toca.",
+  "Un cliente potencial escribe de noche y le contestas dos días después.",
+  "Pagas anuncios sin saber cuál te trajo una venta.",
+  "El reporte del mes llega tarde y no dice qué hacer.",
+  "Probaste ChatGPT una vez y ahí se quedó.",
+];
+
+const services = [
+  { icon: "content", name: "Contenido con IA", text: "Posts, newsletters, carruseles, email marketing, edición de video y lead magnets, con tu voz y tu calendario.", receive: "calendario mensual y piezas publicadas." },
+  { icon: "ads", name: "Meta Ads con IA", text: "Analizamos tus datos todos los días: se potencia lo que funciona, se apaga lo que no y se prueban más creativos en menos tiempo y a menor costo.", receive: "campañas activas y reporte semanal." },
+  { icon: "chat", name: "Chatbots con IA", text: "Cada mensaje, correo o formulario recibe respuesta. Tu propio ManyChat a una fracción del costo y ningún cliente sin respuesta.", receive: "chatbot en producción y tiempo de respuesta medido." },
+  { icon: "video", name: "UGC humano y con IA (con DIGI)", text: "El UGC con IA prueba miles de formatos para encontrar el ganador; el UGC humano genera la confianza que hace que quieran comprarte.", receive: "paquete de videos con derechos de uso." },
+  { icon: "web", name: "Websites y landing pages", text: "Presencia en internet y posicionamiento para que empieces a aparecer en buscadores.", receive: "sitio o landing publicados." },
+];
+
+const steps = [
+  { name: "Diagnóstico", text: "Revisamos tu marketing hoy: canales, tiempo, costos y qué ya funciona. Salimos con una línea base y una prioridad clara." },
+  { name: "Montaje en 30 días", text: "Armamos y ponemos a correr lo priorizado. Tu lado designa a una persona responsable; del nuestro, un consultor asignado." },
+  { name: "Operación y medición", text: "Operamos cada mes y comparamos contra la línea base. Si un número no se mueve, cambiamos la jugada." },
+];
+
+const options = ["Digitalizados", "Equipo propio", "Agencia tradicional", "Consultora grande", "Freelancers sueltos"];
+
+const comparison: [string, string[]][] = [
+  ["Tiempo para arrancar", ["Días: diagnóstico en 20 min y montaje en 30 días", "Meses para contratar y capacitar", "Semanas de onboarding", "Meses de propuesta y arranque", "Rápido, pero lo coordinas tú"]],
+  ["Qué cubre", ["Contenido, anuncios, chatbots, UGC y web en un solo equipo", "Lo que sepan tus contrataciones", "Uno o dos canales", "Estrategia; la ejecución se subcontrata", "Una habilidad por persona"]],
+  ["IA en la operación diaria", ["Sí, es el método", "Depende de cada persona", "Varía por cuenta", "Un diagnóstico sobre IA", "Depende de cada freelancer"]],
+  ["Quién lo coordina", ["Un consultor asignado", "Tú", "Un account manager", "Un socio y un equipo junior", "Tú"]],
+  ["Cómo se mide", ["Línea base y tablero de métricas", "Lo que armes tú", "Reportes de actividad", "Presentaciones", "Casi nunca"]],
+  ["Cómo se paga", ["Tarifa mensual definida en el diagnóstico", "Nómina, prestaciones y herramientas", "Retainer por canal", "Tarifas premium", "Por pieza o por hora"]],
 ];
 
 const reasons = [
-  ["Autoridad editorial, no una consultora improvisada", "Digitalizados es el medio de tecnología y negocios de LATAM. No llegamos a tu empresa con lo que leímos en un blog: es nuestro trabajo diario cubrir esto."],
-  ["Contenido siempre actualizado", "Analizamos herramientas y tendencias de IA todos los días. Lo que enseñamos se actualiza con lo que realmente está pasando."],
-  ["Una cara visible, con trayectoria real", "El programa lo lidera Abraham Rivv, con años de experiencia ayudando a empresas de tecnología a implementar herramientas y crecer en mercados de habla hispana."],
-  ["Enfoque LATAM, no una traducción", "Ejemplos, casos y plantillas pensados para cómo opera realmente una PyME mexicana o latinoamericana."],
-  ["Acceso a nuestra red, no un proveedor que desaparece", "Al terminar la implementación, sigues cerca de Digitalizados: herramientas nuevas, tendencias, y la puerta abierta para el siguiente proceso a automatizar."],
-];
-
-const route = [
-  { day: "1—2 SEMANAS", title: "Diagnóstico", copy: "Mapeamos tu operación: en dónde se va el tiempo y el dinero. Sales con una línea base de KPIs.", tag: "MAPEAR", visual: "Tiempo → tarea → costo" },
-  { day: "PRIORIZACIÓN", title: "Roadmap", copy: "Priorizamos los procesos por impacto, esfuerzo y riesgo, y acordamos contigo cuáles se implementan primero.", tag: "PRIORIZAR", visual: "Impacto × esfuerzo × riesgo" },
-  { day: "4—8 SEMANAS", title: "Implementación", copy: "Construimos e implementamos el o los procesos priorizados, con supervisión humana en cada paso. En paralelo, designamos a un responsable dentro de tu empresa y hacemos la gestión del cambio necesaria para que el equipo lo adopte — no solo que exista.", tag: "CONSTRUIR", visual: "Proceso → producción" },
-  { day: "RESULTADOS", title: "Medición", copy: "Medimos antes y después con datos reales, no percepción, contra la línea base del diagnóstico. Cerramos con el siguiente proceso priorizado — muchos clientes pasan de una implementación puntual a una relación continua.", tag: "MEDIR", visual: "Antes ↗ después" },
-];
-
-const tiers = [
-  { name: "Sprint de Implementación", copy: "Un proceso, implementado de principio a fin. Ideal si tienes un dolor claro y urgente y quieres ver resultado rápido antes de comprometerte a más." },
-  { name: "Transformación de Operación", copy: "Varios procesos, cross-departamento, con consultor asignado y tablero de KPIs. Para empresas con más de un cuello de botella que resolver.", featured: true },
-  { name: "Partner de IA", copy: "Relación continua — nuevos procesos cada trimestre, acceso prioritario al equipo. Para empresas que ya implementaron y quieren seguir escalando con nosotros como su equipo de IA externo." },
+  { icon: "news", name: "Autoridad editorial", text: "Publicamos sobre IA y tecnología para LATAM a diario. Probamos antes de recomendarte." },
+  { icon: "person", name: "Una cara visible", text: "Abraham Rivv dirige el equipo y da la cara por el trabajo." },
+  { icon: "live", name: "Aprendemos en público", text: "En Digitalizados Live probamos herramientas y construimos contenido y marca con IA, en vivo." },
+  { icon: "pin", name: "Pensado para LATAM", text: "Canales, leyes y formas de comprar de la región, no plantillas de otro mercado." },
 ];
 
 const segments = [
-  { name: "Startups y scaleups", pain: "Crecen rápido pero sin procesos definidos — todo se resuelve “a mano” y no escala con el equipo.", processes: "Automatización de operaciones internas (onboarding, soporte, reporting a inversionistas), agentes para tareas repetitivas de growth y ventas." },
-  { name: "PyMEs", detail: "(agencias, servicios profesionales, inmobiliarias, e-commerce, etc.)", pain: "Leads sin contestar a tiempo, cotizaciones y reportes que tardan días en salir.", processes: "Respuesta automática a leads con supervisión humana, generación asistida de propuestas, reportería automatizada." },
-  { name: "Enterprise", pain: "Sistemas y datos dispersos entre áreas, decisiones lentas por falta de visibilidad.", processes: "Integración de sistemas dispersos en un flujo único, dashboards con IA, agentes con supervisión humana en procesos de mayor volumen." },
+  { name: "Startups", text: "ya tienes producto y necesitas contenido, leads y anuncios corriendo sin armar un equipo de marketing." },
+  { name: "PyMEs", text: "tu marketing depende de ti o de una persona saturada; quieres orden, respuesta rápida y saber qué te trae clientes." },
+];
+
+const fitYes = ["recibes leads o mensajes con regularidad", "la dirección participa en las decisiones de marketing", "tienes presupuesto real para invertir en crecer."];
+const fitNo = ["buscas resultados sin que nadie de tu lado revise y apruebe", "quieres un curso o una plantilla, no un equipo que opere", "todavía no tienes clientes ni oferta definida."];
+
+const packages = [
+  { name: "Arranque", tag: "el más elegido", for: "para cuando quieres probar con un frente.", text: "Un servicio montado y operando durante 30 días, con línea base y reporte." },
+  { name: "Motor de marketing", for: "para cuando quieres varios frentes a la vez.", text: "Contenido, anuncios, chatbot y web trabajando juntos, con consultor asignado." },
+  { name: "Partner de IA", for: "para cuando quieres crecer de forma continua.", text: "Operación mensual y un frente nuevo cada trimestre." },
 ];
 
 const faqs = [
-  ["Es caro para mi empresa", "Compáralo con el costo de una contratación o con las horas que hoy se pierden en tareas repetitivas: te ayudamos a hacer esa cuenta en el diagnóstico."],
-  ["¿Puedo pagarlo en partes?", "Sí. Normalmente trabajamos con un anticipo para arrancar y el resto contra entregas, con factura. El esquema exacto lo definimos en el diagnóstico, según el alcance."],
-  ["No tengo tiempo para esto", "Necesitamos acceso y decisiones rápidas de un responsable de tu lado, no que tu equipo lo construya."],
-  ["Mi negocio es muy específico", "Trabajamos con plantillas por industria y un diagnóstico inicial antes de personalizar."],
-  ["Mi equipo no lo va a usar", "Designamos a una persona campeona dentro de tu empresa y trabajamos la gestión del cambio como parte de la implementación."],
-  ["¿Qué pasa con la privacidad de mis datos y los de mis clientes?", "Trabajamos bajo la ley de protección de datos vigente donde operes — la Ley Federal en México, la LGPD en Brasil o la Ley 1581 en Colombia — y cuidamos tanto tus datos como los de tus clientes en cada proceso que implementamos."],
-  ["Ya probé ChatGPT y no pasó nada", "La diferencia es implementar procesos completos con medición, no lanzar prompts sueltos sin seguimiento."],
-  ["No sé nada de tecnología", "No se requiere programar ni tener un equipo técnico: usamos herramientas que probablemente ya conoces."],
-  ["¿Cómo sé que va a funcionar para mí?", "Sales con un tablero de KPIs antes/después: mides tú mismo el resultado, no te pedimos que nos creas."],
-  ["¿Por qué Digitalizados y no una consultora de IA cualquiera?", "Porque no llegamos a improvisar: somos el medio que cubre IA y tecnología en LATAM todos los días, y esa lectura del terreno la aplicamos directo en tu operación."],
-  ["¿Cómo saben que funcionará para nuestro tipo de negocio?", "Empezamos con diagnóstico, no con supuestos. Si no vemos un caso de negocio claro, te lo decimos con honestidad antes de cobrar nada."],
-  ["¿Trabajan con nuestro equipo de tecnología interno (si lo tenemos)?", "Sí, nos integramos con quien ya tengas; no venimos a reemplazar, venimos a acelerar."],
+  ["¿Cuánto cuesta?", "Depende de qué montemos. En el diagnóstico gratis te damos un plan y un rango antes de que decidas nada."],
+  ["¿Y si no tengo tiempo?", "Nosotros operamos; tú apruebas. Tu parte es una revisión corta y una persona que responda."],
+  ["¿Funciona para mi tipo de negocio?", "Si recibes leads o ya vendes, casi seguro. Lo vemos en el diagnóstico y te decimos con honestidad si no encaja."],
+  ["¿Se va a notar que es IA?", "No tiene por qué. Todo se escribe con tu voz y pasa por revisión humana antes de salir."],
+  ["¿Qué pasa con los datos de mis clientes?", "Trabajamos conforme a las leyes de protección de datos de México, Brasil y Colombia, y te decimos qué herramientas usamos."],
+  ["¿Cómo sé si funciona?", "Medimos antes y después contra una línea base. Ves el tablero, no promesas."],
+  ["¿Por qué Digitalizados y no una agencia tradicional?", "Porque operamos con IA todos los días y lo enseñamos en público. Si algo no funciona, lo sabrás y lo cambiamos."],
 ];
 
-const pain = ["Leads que llegan por WhatsApp y nadie contesta a tiempo.", "Noches enteras redactando propuestas y cotizaciones.", "Contenido que no alcanzas a publicar, aunque sabes que deberías.", "Reportes que se arman a mano, mes tras mes.", "Un equipo saturado. Contratar a alguien más no resuelve el problema de fondo."].map((x) => <li key={x}>{x}</li>);
+const navLinks = [
+  ["#que-hacemos", "Qué hacemos"],
+  ["#como-trabajamos", "Cómo trabajamos"],
+  ["#por-que-digitalizados", "Por qué Digitalizados"],
+  ["#paquetes", "Paquetes"],
+  ["#faq", "FAQ"],
+];
 
-function Cta({ children = "Agenda tu diagnóstico gratuito", className = "" }: { children?: React.ReactNode; className?: string }) {
+const COURSE_URL = "https://youtu.be/PtZBSN1W91Y?si=gCVEcwfEWGdoefOG";
+
+const ICONS: Record<string, ReactNode> = {
+  content: <><path d="M4 20h4L19 9l-4-4L4 16v4z" /><path d="M13.5 6.5l4 4" /></>,
+  ads: <><circle cx="12" cy="12" r="8" /><circle cx="12" cy="12" r="4" /><circle cx="12" cy="12" r=".6" /></>,
+  chat: <><path d="M4 5h16v11H9l-5 4V5z" /><path d="M8.5 10.5h.01M12 10.5h.01M15.5 10.5h.01" /></>,
+  video: <><rect x="3" y="6" width="13" height="12" rx="2" /><path d="M16 10.5l5-3v9l-5-3" /></>,
+  web: <><circle cx="12" cy="12" r="9" /><path d="M3 12h18M12 3c2.4 2.5 3.6 5.5 3.6 9s-1.2 6.5-3.6 9c-2.4-2.5-3.6-5.5-3.6-9S9.6 5.5 12 3z" /></>,
+  news: <><rect x="4" y="4" width="16" height="16" rx="2" /><path d="M8 8.5h8M8 12h8M8 15.5h5" /></>,
+  person: <><circle cx="12" cy="8" r="4" /><path d="M4.5 20c1.4-3.8 4.2-5.8 7.5-5.8s6.1 2 7.5 5.8" /></>,
+  live: <><circle cx="12" cy="12" r="2" /><path d="M8 8a5.7 5.7 0 000 8M16 8a5.7 5.7 0 010 8M5.2 5.2a9.6 9.6 0 000 13.6M18.8 5.2a9.6 9.6 0 010 13.6" /></>,
+  pin: <><path d="M12 21s-7-6.2-7-11a7 7 0 0114 0c0 4.8-7 11-7 11z" /><circle cx="12" cy="10" r="2.5" /></>,
+  play: <><circle cx="12" cy="12" r="9" /><path d="M10 8.5v7l6-3.5-6-3.5z" /></>,
+  check: <path d="M5 12.5l4.2 4.2L19 7" />,
+};
+
+function Icon({ name }: { name: string }) {
+  return <span className="icon" aria-hidden="true"><svg viewBox="0 0 24 24">{ICONS[name]}</svg></span>;
+}
+
+function Cta({ children, className = "" }: { children: ReactNode; className?: string }) {
   return <a className={`button ${className}`} href="#diagnostico">{children}<span aria-hidden="true">↗</span></a>;
+}
+
+function delay(i: number, step = 70) {
+  return { transitionDelay: `${i * step}ms` };
 }
 
 export default function Home() {
@@ -63,6 +114,7 @@ export default function Home() {
   const [firstStepData, setFirstStepData] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
   const [formError, setFormError] = useState("");
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const els = Array.from(document.querySelectorAll<HTMLElement>("[data-reveal]"));
@@ -82,6 +134,7 @@ export default function Home() {
     els.forEach((el) => io.observe(el));
     return () => io.disconnect();
   }, []);
+
   async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const currentData = Object.fromEntries(new FormData(e.currentTarget).entries()) as Record<string, string>;
@@ -98,52 +151,277 @@ export default function Home() {
   return <>
     <header className="nav-wrap">
       <nav className="nav shell" aria-label="Navegación principal">
-        <a className="brand" href="#inicio" aria-label="Digitalizados, inicio"><img src="/dgt-logo.png" alt="Digitalizados" /></a>
-        <div className="nav-links"><a href="#programa">La diferencia</a><a href="#ruta">Cómo trabajamos</a><a href="#niveles">Modalidades</a><a href="#faq">FAQ</a></div>
+        <a className="brand" href="#inicio" aria-label="Digitalizados, inicio"><img src="/dgt-logo.png" alt="Digitalizados" width="1188" height="685" /></a>
+        <div id="menu" className={`nav-links ${menuOpen ? "open" : ""}`}>
+          {navLinks.map(([href, label]) => <a key={href} href={href} onClick={() => setMenuOpen(false)}>{label}</a>)}
+        </div>
         <Cta className="nav-cta">Diagnóstico gratis</Cta>
+        <button className="menu-toggle" type="button" aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"} aria-expanded={menuOpen} aria-controls="menu" onClick={() => setMenuOpen((o) => !o)}><span /><span /><span /></button>
       </nav>
     </header>
 
     <main>
+      {/* 2. HERO */}
       <section className="hero" id="inicio">
-        <div className="hero-bg" aria-hidden="true"><span className="orb orb-1"/><span className="orb orb-2"/><span className="orb orb-3"/></div>
-        <div className="shell hero-copy hero-centered">
-          <p className="hero-tag" data-reveal>AGENCIA DE IMPLEMENTACIÓN DE IA · MÉXICO Y LATAM</p>
-          <h1 data-reveal style={{transitionDelay:".05s"}}>Implementamos IA en tu empresa. <em>Nosotros hacemos el trabajo.</em></h1>
-          <p className="lede" data-reveal style={{transitionDelay:".12s"}}>No es un curso ni una plantilla. Es un equipo que entra a tu operación, identifica dónde se pierde tiempo y dinero, y deja procesos de IA funcionando — medidos, no prometidos.</p>
-          <div className="hero-actions" data-reveal style={{transitionDelay:".19s"}}><Cta>Agenda una llamada de diagnóstico</Cta><a className="text-link" href="#ruta">Ver cómo trabajamos <span>↓</span></a></div>
+        <div className="hero-bg" aria-hidden="true"><span className="orb orb-1" /><span className="orb orb-2" /><span className="orb orb-3" /></div>
+        <div className="shell hero-inner">
+          <p className="badge" data-reveal>⚡ AI-powered Marketing · PyMEs y startups</p>
+          <h1 data-reveal style={delay(1, 60)}>Tu marketing, operado con IA. <em>Tu equipo, enfocado en vender.</em></h1>
+          <p className="lede" data-reveal style={delay(2, 60)}>Somos Digitalizados, el medio de IA y tecnología de LATAM. Armamos y operamos con IA tu contenido, tus anuncios, la atención a clientes, el UGC y tu presencia web, y medimos qué te trae clientes.</p>
+          <div className="hero-actions" data-reveal style={delay(3, 60)}>
+            <Cta>Agendar diagnóstico gratis (20 min)</Cta>
+            <a className="button ghost" href="#como-trabajamos">Ver cómo trabajamos<span aria-hidden="true">↓</span></a>
+          </div>
+          <p className="microcopy" data-reveal style={delay(4, 60)}>Sin compromiso. Sin preparación técnica.</p>
         </div>
       </section>
 
-      <section className="data-strip" aria-labelledby="datos-title"><div className="shell"><div className="strip-heading" data-reveal><span id="datos-title">SEÑALES DEL MERCADO</span><span>Datos verificables, no opinión</span></div><div className="stats-grid">{stats.map((s, i) => <article className="stat" key={s.value} data-reveal style={{transitionDelay:`${i*70}ms`}}><strong>{s.value}</strong><p>{s.text}</p><small>FUENTE: {s.source}</small></article>)}</div></div></section>
+      {/* 3. FRANJA DE SEÑALES */}
+      <section className="signals" aria-labelledby="signals-title">
+        <div className="shell">
+          <h2 id="signals-title" data-reveal>Las PyMEs ya probaron la IA. Pocas la usan bien.</h2>
+          <div className="stats">
+            {signals.map((s, i) => <article className="stat" key={s.value} data-reveal style={delay(i)}><strong>{s.value}</strong><p>{s.text}</p><small>{s.source}</small></article>)}
+          </div>
+        </div>
+      </section>
 
-      <section className="section light" id="programa"><div className="shell"><div className="section-head split" data-reveal><div><p className="eyebrow dark">LA DIFERENCIA</p><h2>Esto no lo arma un “gurú” ni una consultora genérica.</h2></div><p>Lo arma el medio que vive cubriendo IA y tecnología para LATAM todos los días — y lo implementamos nosotros mismos en tu operación.</p></div><div className="reasons">{reasons.map(([title, copy], i) => <article key={title} data-reveal style={{transitionDelay:`${i*55}ms`}}><span className="reason-mark">{["◆","↻","◎","⌁","∞"][i]}</span><div><h3>{title}</h3><p>{copy}</p></div></article>)}</div></div></section>
+      {/* 4. EL PROBLEMA */}
+      <section className="section problem">
+        <div className="shell problem-grid">
+          <div data-reveal>
+            <h2>Tu marketing no necesita más horas. <em>Necesita un sistema.</em></h2>
+            <p className="intro">Si esto te suena, no es falta de ganas. Es falta de proceso.</p>
+          </div>
+          <div data-reveal style={delay(1, 100)}>
+            <ul className="pain-list">{pains.map((p) => <li key={p}>{p}</li>)}</ul>
+            <p className="closing">Usar IA no es abrir un chat. Es poner un proceso a funcionar, con alguien responsable y números de antes y después.</p>
+          </div>
+        </div>
+      </section>
 
-      <section className="section video-section" aria-labelledby="video-title"><div className="shell video-grid"><div className="video-copy" data-reveal><p className="eyebrow">APRENDE CON DIGITALIZADOS</p><h2 id="video-title">El mejor curso gratuito de Claude, <em>hecho por nosotros.</em></h2><p>Más de <strong>7,000 personas</strong> ya aprendieron de IA con este video. Puedes empezar ahora mismo, sin registro y a tu ritmo.</p><a className="text-link" href="https://youtu.be/PtZBSN1W91Y?si=gCVEcwfEWGdoefOG" target="_blank" rel="noreferrer">Ver directamente en YouTube <span>↗</span></a></div><div className="video-frame"><div className="video-label"><span>CURSO GRATUITO</span><span>CLAUDE · DIGITALIZADOS</span></div><iframe src="https://www.youtube-nocookie.com/embed/PtZBSN1W91Y?rel=0" title="El mejor curso gratuito de Claude, hecho por Digitalizados" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen loading="lazy" /></div></div></section>
+      {/* 5. QUÉ HACEMOS */}
+      <section className="section alt" id="que-hacemos">
+        <div className="shell">
+          <div className="section-head" data-reveal>
+            <h2>Cinco cosas que operamos por ti.</h2>
+            <p>Cada una con IA, con una persona revisando y con un número que la mide.</p>
+          </div>
+          <div className="services">
+            {services.map((s, i) => <article className="card service" key={s.name} data-reveal style={delay(i)}>
+              <Icon name={s.icon} />
+              <h3>{s.name}</h3>
+              <p>{s.text}</p>
+              <p className="receive"><b>Recibes:</b> {s.receive}</p>
+            </article>)}
+          </div>
+        </div>
+      </section>
 
-      <section className="live-section" aria-labelledby="live-title"><div className="shell"><div className="live-head" data-reveal><div><p className="eyebrow dark">DIGITALIZADOS LIVE</p><h2 id="live-title">No hablamos de IA desde afuera. <em>La probamos en vivo.</em></h2></div><p>Sesiones reales analizando herramientas, cambios de producto y aplicaciones para negocio. Así mantenemos el programa conectado con lo que está pasando ahora.</p></div><div className="live-gallery"><figure className="live-main"><img src="/dgt-live-claude.webp" alt="Sesión de Digitalizados Live analizando nuevas reglas de contexto en Claude" loading="lazy"/><figcaption><span>ANÁLISIS EN VIVO</span><strong>Claude y context engineering</strong></figcaption></figure><figure><img src="/dgt-live-patron-digital.webp" alt="Sesión de Digitalizados Live desarrollando el concepto El Patrón Digital" loading="lazy"/><figcaption><span>CONSTRUCCIÓN EN PÚBLICO</span><strong>IA aplicada a contenido y marca</strong></figcaption></figure><figure><img src="/dgt-live-kimi.webp" alt="Sesión de Digitalizados Live explorando herramientas y conectores de Kimi" loading="lazy"/><figcaption><span>PRUEBA DE HERRAMIENTAS</span><strong>Nuevas capacidades de IA</strong></figcaption></figure></div></div></section>
+      {/* 6. CÓMO TRABAJAMOS */}
+      <section className="section" id="como-trabajamos">
+        <div className="shell">
+          <div className="section-head" data-reveal><h2>Tres pasos. <em>El primero es gratis.</em></h2></div>
+          <ol className="steps">
+            {steps.map((s, i) => <li className="card step" key={s.name} data-reveal style={delay(i, 90)}>
+              <span className="step-num" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
+              <h3>{s.name}</h3>
+              <p>{s.text}</p>
+            </li>)}
+          </ol>
+          <p className="takeaway" data-reveal><strong>Lo que te llevas:</strong> tablero de métricas, procesos corriendo y plan del mes siguiente.</p>
+        </div>
+      </section>
 
-      <section className="section pain-section"><div className="shell pain-grid"><div data-reveal><p className="eyebrow">EL PROBLEMA NO ES TU EQUIPO</p><h2>Tu equipo no necesita trabajar más horas. <em>Necesita dejar de perderlas.</em></h2></div><div data-reveal style={{transitionDelay:".1s"}}><ul className="pain-list">{pain}</ul><p className="pain-close">Ya probaste ChatGPT una vez... y no pasó nada. Nadie lo volvió a usar.</p><p className="pain-close">El problema no es la herramienta. Es que nadie en tu empresa tiene el tiempo ni el mandato para implementarla de verdad. Por eso lo hacemos nosotros.</p></div></div></section>
+      {/* 7. COMPARATIVA */}
+      <section className="section compare" id="comparativa">
+        <div className="shell">
+          <div className="section-head" data-reveal>
+            <p className="eyebrow">Por qué nosotros</p>
+            <h2>Un departamento de marketing completo, <em>sin tener que armarlo.</em></h2>
+            <p>Con Digitalizados tienes un equipo de marketing trabajando contigo, operado con IA, más rápido y a menor costo que las alternativas. Comparamos lo que decide si tu marketing te trae clientes.</p>
+          </div>
 
-      <section className="section sectors-section"><div className="shell"><div className="section-head split" data-reveal><div><p className="eyebrow dark">SECTORES</p><h2>Trabajamos en los sectores que ya conocemos.</h2></div><p>No llegamos genéricos. Cada segmento tiene sus propios procesos, herramientas y objeciones — y ya los mapeamos.</p></div><div className="sectors-grid">{segments.map((s, i) => <article className="sector" key={s.name} data-reveal style={{transitionDelay:`${i*80}ms`}}><div className="sector-head"><h3>{s.name}</h3>{s.detail && <span>{s.detail}</span>}</div><div className="sector-row"><p className="sector-label">Dolor nombrado</p><p>{s.pain}</p></div><div className="sector-row"><p className="sector-label">Procesos típicos que implementamos</p><p>{s.processes}</p></div></article>)}</div></div></section>
+          <div className="compare-table-wrap" data-reveal>
+            <table className="compare-table" aria-label="Comparativa entre Digitalizados y otras opciones">
+              <thead>
+                <tr><th scope="col">Criterio</th>{options.map((o, i) => <th scope="col" key={o} className={i === 0 ? "us" : undefined}>{o}</th>)}</tr>
+              </thead>
+              <tbody>
+                {comparison.map(([criterion, values]) => <tr key={criterion}>
+                  <th scope="row">{criterion}</th>
+                  {values.map((v, i) => <td key={options[i]} className={i === 0 ? "us" : undefined}>{v}</td>)}
+                </tr>)}
+              </tbody>
+            </table>
+          </div>
 
-      <section className="section route-section" id="ruta"><div className="shell"><div className="section-head split" data-reveal><div><p className="eyebrow dark">CÓMO TRABAJAMOS</p><h2>Así trabajamos. Nosotros ejecutamos, tú apruebas.</h2></div><p>Sin roadmaps de 6 meses ni presentaciones de 200 slides. Vamos directo a lo que mueve la aguja.</p></div><div className="route">{route.map((r, i) => <article className="route-item" key={r.title} data-reveal><div className="route-visual"><div className="visual-grid"><span>{r.tag}</span><strong>{r.visual}</strong><i style={{width:`${58 + i*11}%`}}/></div></div><div className="route-copy"><p className="route-day">{String(i+1).padStart(2,"0")} / {r.day}</p><h3>{r.title}</h3><p>{r.copy}</p></div></article>)}</div><div className="mid-cta" data-reveal><p>¿Quieres saber cuál sería tu primer proceso?</p><Cta>Lo vemos en 20 minutos</Cta></div></div></section>
+          <div className="compare-cards">
+            {comparison.map(([criterion, values], ci) => <article className="card ccard" key={criterion} data-reveal style={delay(ci % 2, 80)}>
+              <h3>{criterion}</h3>
+              <dl>
+                {values.map((v, i) => <div className={i === 0 ? "row us-row" : "row"} key={options[i]}><dt>{options[i]}</dt><dd>{v}</dd></div>)}
+              </dl>
+            </article>)}
+          </div>
 
-      <section className="section deliverables"><div className="shell"><div data-reveal><p className="eyebrow">AL FINAL NO TE LLEVAS UN DIPLOMA</p><h2>Te llevas una operación más clara.</h2></div><div className="deliver-grid"><article data-reveal><b>01</b><h3>Tablero de KPIs</h3><p>Una línea base y resultados antes/después que tu equipo puede revisar.</p></article><article data-reveal style={{transitionDelay:".08s"}}><b>02</b><h3>Procesos en producción</h3><p>Dos flujos reales, con supervisión humana y responsables definidos.</p></article><article data-reveal style={{transitionDelay:".16s"}}><b>03</b><h3>Hoja de ruta</h3><p>El siguiente proceso priorizado por impacto, esfuerzo y riesgo.</p></article></div></div></section>
+          <div className="compare-close" data-reveal>
+            <p>Si ya tienes un equipo de marketing completo y funcionando, probablemente no nos necesitas. Si tienes a una persona saturada o a nadie, esta es la forma más rápida de tener un departamento entero.</p>
+            <Cta>Agendar diagnóstico gratis</Cta>
+          </div>
+        </div>
+      </section>
 
-      <section className="section pricing-section" id="niveles"><div className="shell"><div className="section-head split" data-reveal><div><p className="eyebrow dark">TRES FORMAS DE TRABAJAR JUNTOS</p><h2>Tres formas de trabajar juntos.</h2></div><p>El alcance y la inversión se definen en el diagnóstico, según tu operación — no hay dos empresas iguales.</p></div><div className="plans" data-reveal>{tiers.map(t => <article className={`plan ${t.featured ? "featured" : ""}`} key={t.name}>{t.featured && <div className="ribbon">★ MÁS ELEGIDO</div>}<div className="plan-head"><p>{t.name}</p></div><p className="plan-copy">{t.copy}</p></article>)}</div><div className="tiers-cta" data-reveal><Cta>Habla con ventas</Cta></div></div></section>
+      {/* 8. POR QUÉ DIGITALIZADOS */}
+      <section className="section" id="por-que-digitalizados">
+        <div className="shell">
+          <div className="section-head" data-reveal><h2>Un medio que enseña IA todos los días <em>ahora opera tu marketing con ella.</em></h2></div>
+          <div className="why-grid">
+            {reasons.map((r, i) => <article className="card why-card" key={r.name} data-reveal style={delay(i)}>
+              <Icon name={r.icon} />
+              <h3>{r.name}</h3>
+              <p>{r.text}</p>
+            </article>)}
+          </div>
+          <article className="card course" data-reveal>
+            <div>
+              <Icon name="play" />
+              <h3>Curso gratuito de Claude</h3>
+              <p>Más de 7,000 personas han visto el video.</p>
+              <a className="button" href={COURSE_URL} target="_blank" rel="noreferrer">Ver el curso gratis<span aria-hidden="true">↗</span></a>
+            </div>
+            <div className="video-frame">
+              <iframe src="https://www.youtube-nocookie.com/embed/PtZBSN1W91Y?rel=0" title="Curso gratuito de Claude, hecho por Digitalizados" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen loading="lazy" />
+            </div>
+          </article>
+        </div>
+      </section>
 
-      <section className="guarantee"><div className="shell guarantee-grid" data-reveal><div><p className="eyebrow">GARANTÍA DE IMPLEMENTACIÓN</p><span className="shield">✓</span></div><blockquote>“Si al terminar la implementación no tienes el o los procesos acordados funcionando en tu operación, seguimos trabajando sin costo adicional hasta lograrlo.”</blockquote></div></section>
+      {/* 9. PARA QUIÉN ES */}
+      <section className="section alt" id="para-quien">
+        <div className="shell">
+          <div className="section-head" data-reveal><h2>Hecho para negocios que ya venden <em>y quieren vender más.</em></h2></div>
+          <div className="segments">
+            {segments.map((s, i) => <article className="card segment" key={s.name} data-reveal style={delay(i, 90)}>
+              <h3>{s.name}</h3>
+              <p className="cap">{s.text}</p>
+            </article>)}
+          </div>
+          <div className="fit">
+            <article className="card" data-reveal>
+              <h3>Es para ti si:</h3>
+              <ul className="yes">{fitYes.map((x) => <li key={x}><span className="cap">{x}</span></li>)}</ul>
+            </article>
+            <article className="card" data-reveal style={delay(1, 90)}>
+              <h3>No es para ti si:</h3>
+              <ul className="no">{fitNo.map((x) => <li key={x}><span className="cap">{x}</span></li>)}</ul>
+            </article>
+          </div>
+        </div>
+      </section>
 
-      <section className="section fit-section"><div className="shell"><div className="fit-grid"><article data-reveal><p className="eyebrow dark">ES PARA TI SI...</p><ul>{["Tu empresa recibe leads o clientes de forma constante", "Tienes un proceso repetitivo claro que te está costando tiempo o dinero", "El dueño o alguien de dirección está involucrado y puede tomar la decisión", "Tienes presupuesto para resolverlo de verdad, no solo para “probar”"].map(x=><li key={x}>{x}</li>)}</ul></article><article className="not-fit" data-reveal style={{transitionDelay:".1s"}}><p className="eyebrow dark">NO ES PARA TI SI...</p><ul>{["No tienes flujo entrante de prospectos o procesos repetitivos identificables", "Buscas una solución de autoservicio/DIY de bajo costo", "Nadie en tu empresa tiene tiempo ni autoridad para acompañar el proyecto", "Buscas una “app mágica” sin cambio de proceso ni de equipo de por medio"].map(x=><li key={x}>{x}</li>)}</ul></article></div></div></section>
+      {/* 10. PAQUETES */}
+      <section className="section" id="paquetes">
+        <div className="shell">
+          <div className="section-head" data-reveal>
+            <h2>Tres formas de trabajar juntos.</h2>
+            <p>El plan exacto se define en el diagnóstico. Estos son los puntos de partida.</p>
+          </div>
+          <div className="packages">
+            {packages.map((p, i) => <article className={`card package ${p.tag ? "featured" : ""}`} key={p.name} data-reveal style={delay(i, 90)}>
+              {p.tag && <span className="tag">{p.tag}</span>}
+              <h3>{p.name}</h3>
+              <p className="for cap">{p.for}</p>
+              <p>{p.text}</p>
+            </article>)}
+          </div>
+          <div className="packages-cta" data-reveal>
+            <Cta>Hablar con el equipo</Cta>
+            <p className="fineprint">Si al terminar el montaje no está funcionando lo acordado, seguimos trabajando sin costo adicional hasta que funcione.</p>
+          </div>
+        </div>
+      </section>
 
-      <section className="section faq-section" id="faq"><div className="shell faq-grid"><div data-reveal><p className="eyebrow dark">PREGUNTAS FRECUENTES</p><h2>Las dudas antes de empezar.</h2><p>Sin letra pequeña. Si tu caso es distinto, lo vemos en el diagnóstico.</p></div><div className="accordion">{faqs.map(([q,a], i)=><details key={q} open={i===0}><summary>{q}<span>+</span></summary><p>{a}</p></details>)}</div></div></section>
+      {/* 11. FAQ */}
+      <section className="section alt" id="faq">
+        <div className="shell faq-grid">
+          <div data-reveal><h2>Preguntas frecuentes</h2></div>
+          <div className="accordion" data-reveal>
+            {faqs.map(([q, a], i) => <details key={q} open={i === 0}><summary>{q}<span aria-hidden="true">+</span></summary><p>{a}</p></details>)}
+          </div>
+        </div>
+      </section>
 
-      <section className="diagnostic" id="diagnostico"><div className="shell diagnostic-grid"><div data-reveal><p className="eyebrow">DIAGNÓSTICO GRATUITO · 20 MINUTOS</p><h2>Identifica dónde la IA tendría mayor impacto antes de invertir.</h2><p>Revisamos tu operación, elegimos un primer proceso viable y te decimos con honestidad si tiene sentido trabajar juntos.</p><div className="call-points"><span>01 · Sin compromiso</span><span>02 · Sin preparación técnica</span><span>03 · Con siguiente paso claro</span></div></div><form onSubmit={submit} className="lead-form">{sent ? <div className="success" role="status"><span>✓</span><h3>Solicitud recibida.</h3><p>Gracias. Te contactaremos para coordinar tu diagnóstico de 20 minutos.</p><button type="button" onClick={()=>{setSent(false);setFormStep(1)}}>Enviar otra solicitud</button></div> : <><div className="form-progress" aria-label={`Paso ${formStep} de 2`}><span>{formStep}/2</span><div><i style={{width:formStep === 1 ? "50%" : "100%"}}/></div></div><fieldset hidden={formStep !== 1} disabled={formStep !== 1}><legend>Datos de contacto</legend><div className="form-row"><label>Nombre <b>*</b><input name="nombre" required autoComplete="given-name"/></label><label>Apellidos <b>*</b><input name="apellidos" required autoComplete="family-name"/></label></div><label>Correo empresarial <b>*</b><input type="email" name="correo" required autoComplete="email"/></label><label>Rol <b>*</b><select name="rol" required defaultValue=""><option value="" disabled>Selecciona una opción</option><option>Dueño/a o fundador/a</option><option>Dirección general</option><option>Operaciones</option><option>Ventas</option><option>Marketing</option><option>Tecnología</option><option>Otro</option></select></label><label>Número de teléfono <b>*</b><div className="phone-field"><select name="pais" aria-label="Código de país" defaultValue="+52"><option value="+52">MX +52</option><option value="+1">US +1</option><option value="+57">CO +57</option><option value="+54">AR +54</option><option value="+56">CL +56</option><option value="+51">PE +51</option><option value="otro">Otro</option></select><input type="tel" name="telefono" required autoComplete="tel" inputMode="tel"/></div></label><label>Tamaño de tu empresa (# empleados) <b>*</b><input type="number" min="1" name="tamano" required inputMode="numeric"/></label><button className="submit" type="submit">Siguiente <span>→</span></button></fieldset><fieldset hidden={formStep !== 2} disabled={formStep !== 2}><legend>Sobre tu empresa</legend><label>Nombre de la empresa <b>*</b><input name="empresa" required autoComplete="organization"/></label><label>Perfil de LinkedIn <b>*</b><input type="url" name="linkedin" required placeholder="https://linkedin.com/in/..."/></label><label>¿Cómo te enteraste de nosotros? <b>*</b><input name="origen" required/></label><label>¿Cuál es tu mayor reto operativo hoy? <b>*</b><select name="reto" required defaultValue=""><option value="" disabled>Selecciona una opción</option><option>Atención al cliente</option><option>Ventas y cotizaciones</option><option>Contenido y marketing</option><option>Administración</option><option>Otro</option></select></label>{formError && <p className="form-error" role="alert">{formError}</p>}<div className="form-actions"><button className="back-button" type="button" onClick={()=>setFormStep(1)}>Anterior</button><button className="submit" type="submit" disabled={submitting}>{submitting ? "Enviando..." : "Enviar"} <span>↗</span></button></div></fieldset><small>Al enviar aceptas que Digitalizados te contacte sobre esta solicitud. No compartimos tus datos.</small></>}</form></div></section>
+      {/* 12. DIAGNÓSTICO GRATIS */}
+      <section className="section diagnostic" id="diagnostico">
+        <div className="shell diagnostic-grid">
+          <div data-reveal>
+            <h2>20 minutos para ver <em>dónde se te va el marketing.</em></h2>
+            <p className="sub">Revisamos tu situación y te decimos qué haríamos primero, con o sin nosotros.</p>
+            <ul className="benefits">
+              {["Sin compromiso", "Sin preparación técnica", "Sales con un siguiente paso claro."].map((b) => <li key={b}><Icon name="check" />{b}</li>)}
+            </ul>
+          </div>
+          <form onSubmit={submit} className="lead-form" data-reveal style={delay(1, 100)}>
+            {sent ? <div className="success" role="status"><span>✓</span><h3>Solicitud recibida.</h3><p>Gracias. Te contactaremos para coordinar tu diagnóstico de 20 minutos.</p><button type="button" onClick={() => { setSent(false); setFormStep(1); }}>Enviar otra solicitud</button></div> : <>
+              <div className="form-progress" aria-label={`Paso ${formStep} de 2`}><span>{formStep}/2</span><div><i style={{ width: formStep === 1 ? "50%" : "100%" }} /></div></div>
+              <fieldset hidden={formStep !== 1} disabled={formStep !== 1}>
+                <legend>Datos de contacto</legend>
+                <div className="form-row"><label>Nombre <b>*</b><input name="nombre" required autoComplete="given-name" /></label><label>Apellidos <b>*</b><input name="apellidos" required autoComplete="family-name" /></label></div>
+                <label>Correo empresarial <b>*</b><input type="email" name="correo" required autoComplete="email" /></label>
+                <label>Rol <b>*</b><select name="rol" required defaultValue=""><option value="" disabled>Selecciona una opción</option><option>Dueño/a o fundador/a</option><option>Dirección general</option><option>Operaciones</option><option>Ventas</option><option>Marketing</option><option>Tecnología</option><option>Otro</option></select></label>
+                <label>Número de teléfono <b>*</b><div className="phone-field"><select name="pais" aria-label="Código de país" defaultValue="+52"><option value="+52">MX +52</option><option value="+1">US +1</option><option value="+57">CO +57</option><option value="+54">AR +54</option><option value="+56">CL +56</option><option value="+51">PE +51</option><option value="otro">Otro</option></select><input type="tel" name="telefono" required autoComplete="tel" inputMode="tel" /></div></label>
+                <label>Tamaño de tu empresa (# empleados) <b>*</b><input type="number" min="1" name="tamano" required inputMode="numeric" /></label>
+                <button className="submit" type="submit">Siguiente <span>→</span></button>
+              </fieldset>
+              <fieldset hidden={formStep !== 2} disabled={formStep !== 2}>
+                <legend>Sobre tu empresa</legend>
+                <label>Nombre de la empresa <b>*</b><input name="empresa" required autoComplete="organization" /></label>
+                <label>Perfil de LinkedIn <b>*</b><input type="url" name="linkedin" required placeholder="https://linkedin.com/in/..." /></label>
+                <label>¿Cómo te enteraste de nosotros? <b>*</b><input name="origen" required /></label>
+                <label>¿Cuál es tu mayor reto operativo hoy? <b>*</b><select name="reto" required defaultValue=""><option value="" disabled>Selecciona una opción</option><option>Atención al cliente</option><option>Ventas y cotizaciones</option><option>Contenido y marketing</option><option>Administración</option><option>Otro</option></select></label>
+                {formError && <p className="form-error" role="alert">{formError}</p>}
+                <div className="form-actions"><button className="back-button" type="button" onClick={() => setFormStep(1)}>Anterior</button><button className="submit" type="submit" disabled={submitting}>{submitting ? "Enviando..." : "Agendar mi diagnóstico"} <span>↗</span></button></div>
+              </fieldset>
+              <small>Al enviar aceptas que te contactemos y nuestro <a href="#">aviso de privacidad</a>.</small>
+            </>}
+          </form>
+        </div>
+      </section>
 
-      <section className="final-cta"><div className="shell" data-reveal><p className="eyebrow">EL MOMENTO ES AHORA. EL HYPE NO.</p><h2>Tu competencia ya está probando IA. La diferencia la va a hacer quién la implemente de verdad.</h2><p>Empieza con un diagnóstico gratuito de 20 minutos, sin compromiso.</p><Cta>Agendar mi diagnóstico</Cta></div></section>
+      {/* 13. CTA FINAL */}
+      <section className="final-cta">
+        <div className="shell" data-reveal>
+          <h2>Tu competencia ya probó la IA. <em>La diferencia es quién la pone a vender.</em></h2>
+          <p>Empieza con 20 minutos. Sin costo.</p>
+          <Cta>Agendar diagnóstico gratis</Cta>
+        </div>
+      </section>
     </main>
 
-    <footer><div className="shell footer-grid"><div><a className="brand footer-brand" href="#inicio"><img src="/dgt-logo.png" alt="Digitalizados" /></a><p>Tu aliado para liderar la transformación con IA.</p></div><div><h3>El servicio</h3><a href="#programa">La diferencia</a><a href="#ruta">Cómo trabajamos</a><a href="#niveles">Modalidades</a><a href="#faq">FAQ</a></div><div><h3>Digitalizados</h3><a href="#diagnostico">Contacto</a><a href="https://www.instagram.com/digitalizadosco/" target="_blank" rel="noreferrer">Instagram</a><a href="https://www.linkedin.com/company/digitalizadosco/" target="_blank" rel="noreferrer">LinkedIn</a><a href="https://www.youtube.com/@digitalizados" target="_blank" rel="noreferrer">YouTube</a></div><div><h3>Legal</h3><a href="#">Aviso de privacidad</a><p>Los resultados varían según la empresa; las cifras mostradas son estimaciones basadas en fuentes públicas y casos previos, no garantías.</p></div></div><div className="shell footer-bottom"><span>© 2026 Digitalizados</span><span>Los resultados varían según la empresa; el alcance y la inversión se definen en el diagnóstico.</span></div></footer>
+    {/* 14. FOOTER */}
+    <footer>
+      <div className="shell footer-top">
+        <div className="footer-brand">
+          <a className="brand" href="#inicio" aria-label="Digitalizados, inicio"><img src="/dgt-logo.png" alt="Digitalizados" width="1188" height="685" loading="lazy" /></a>
+          <p>AI-powered Marketing para PyMEs y startups.</p>
+        </div>
+        <nav className="footer-links" aria-label="Enlaces del pie de página">
+          <a href="#que-hacemos">Qué hacemos</a>
+          <a href="#como-trabajamos">Cómo trabajamos</a>
+          <a href="#paquetes">Paquetes</a>
+          <a href="#faq">FAQ</a>
+          <a href="#diagnostico">Contacto</a>
+          <a href="https://www.instagram.com/digitalizadosco/" target="_blank" rel="noreferrer">Instagram</a>
+          <a href="https://www.linkedin.com/company/digitalizadosco/" target="_blank" rel="noreferrer">LinkedIn</a>
+          <a href="https://www.youtube.com/@digitalizados" target="_blank" rel="noreferrer">YouTube</a>
+          <a href="#">Aviso de privacidad</a>
+        </nav>
+      </div>
+      <div className="shell footer-bottom">
+        <p>Los resultados varían según cada negocio. Las cifras son estimaciones, no garantías.</p>
+        <p>© 2026 Digitalizados</p>
+      </div>
+    </footer>
   </>;
 }
