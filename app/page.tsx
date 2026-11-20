@@ -284,8 +284,7 @@ export default function Home() {
     <main>
       {/* 2. HERO */}
       <section className="hero band-dark" id="inicio">
-        <div className="hero-glow" aria-hidden="true" />
-        <div className="aurora" aria-hidden="true"><span /><span /></div>
+        <div className="mesh" aria-hidden="true"><span /><span /><span /><span /></div>
         <div className="shell hero-inner">
           <h1 className="hero-title"><Split text="Tu departamento de marketing completo," em="operado con IA." /></h1>
           <p className="lede rise" style={{ animationDelay: "480ms" }}>Contenido, anuncios, chatbots, UGC y web en un solo equipo, trabajando contigo desde el primer mes.</p>
