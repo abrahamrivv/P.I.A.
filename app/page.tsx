@@ -165,14 +165,14 @@ export default function Home() {
       <section className="hero" id="inicio">
         <div className="hero-bg" aria-hidden="true"><span className="orb orb-1" /><span className="orb orb-2" /><span className="orb orb-3" /></div>
         <div className="shell hero-inner">
-          <p className="badge" data-reveal>⚡ AI-powered Marketing · PyMEs y startups</p>
-          <h1 data-reveal style={delay(1, 60)}>Tu marketing, operado con IA. <em>Tu equipo, enfocado en vender.</em></h1>
-          <p className="lede" data-reveal style={delay(2, 60)}>Somos Digitalizados, el medio de IA y tecnología de LATAM. Armamos y operamos con IA tu contenido, tus anuncios, la atención a clientes, el UGC y tu presencia web, y medimos qué te trae clientes.</p>
-          <div className="hero-actions" data-reveal style={delay(3, 60)}>
+          <p className="badge rise">⚡ AI-powered Marketing · PyMEs y startups</p>
+          <h1 className="rise" style={{ animationDelay: "60ms" }}>Tu marketing, operado con IA. <em>Tu equipo, enfocado en vender.</em></h1>
+          <p className="lede rise" style={{ animationDelay: "120ms" }}>Somos Digitalizados, el medio de IA y tecnología de LATAM. Armamos y operamos con IA tu contenido, tus anuncios, la atención a clientes, el UGC y tu presencia web, y medimos qué te trae clientes.</p>
+          <div className="hero-actions rise" style={{ animationDelay: "180ms" }}>
             <Cta>Agendar diagnóstico gratis <span className="nw">(20 min)</span></Cta>
             <a className="button ghost" href="#como-trabajamos">Ver cómo trabajamos<span aria-hidden="true">↓</span></a>
           </div>
-          <p className="microcopy" data-reveal style={delay(4, 60)}>Sin compromiso. Sin preparación técnica.</p>
+          <p className="microcopy rise" style={{ animationDelay: "240ms" }}>Sin compromiso. Sin preparación técnica.</p>
         </div>
       </section>
 
