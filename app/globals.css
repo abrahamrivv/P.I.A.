@@ -296,10 +296,11 @@ html:not(.js) h2 em, h2.is-visible em { background-size: 100% 0.36em; }
   place-items: center;
   width: 100%;
   height: 100%;
-  color: var(--teal);
-  background: #fff;
+  color: var(--mint);
+  background: rgba(4, 72, 75, 0.92);
+  border: 1px solid rgba(0, 255, 200, 0.45);
   border-radius: 50%;
-  box-shadow: 0 0 0 6px rgba(0, 255, 200, 0.1), 0 10px 30px -6px rgba(0, 255, 200, 0.55);
+  box-shadow: 0 0 0 6px rgba(0, 255, 200, 0.08), 0 10px 30px -6px rgba(0, 255, 200, 0.5);
   animation: spin var(--dur) linear infinite reverse;
 }
 .r2 .sat > span { animation-direction: normal; }
@@ -763,7 +764,7 @@ footer.band-dark { padding: 64px 0 34px; font-size: 0.92rem; background: var(--t
   .hero { min-height: auto; }
   .ring.r1 { --d: 470px; }
   .ring.r2 { display: none; }
-  .sat { width: 42px; height: 42px; margin: -21px 0 0 -21px; opacity: 0.6; }
+  .sat { width: 42px; height: 42px; margin: -21px 0 0 -21px; opacity: 0.45; }
   .sat svg { width: 18px; height: 18px; }
   .badge { font-size: 0.74rem; padding: 8px 14px; }
   .hero-actions { flex-direction: column; align-items: stretch; width: 100%; }
