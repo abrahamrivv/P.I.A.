@@ -475,6 +475,25 @@ html:not(.js) h2 em, h2.is-visible em { background-size: 100% 0.36em; }
 .video-frame { position: relative; aspect-ratio: 16 / 9; overflow: hidden; border: 1px solid var(--l2); border-radius: 14px; background: #000; }
 .video-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 
+/* ---------- Newsletter (beehiiv embed) ---------- */
+.beehiiv-embed { display: block; width: 100%; height: 150px; max-width: 100%; margin: 0; border: 0; background: transparent; }
+.newsletter {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: center;
+  margin-top: 18px;
+  padding: 34px 36px;
+  background: var(--mint-tint);
+  border-color: rgba(0, 168, 138, 0.35);
+}
+.newsletter .eyebrow { margin-bottom: 12px; }
+.newsletter h3 { font-size: 1.8rem; }
+.newsletter p:not(.eyebrow) { margin: 10px 0 0; color: var(--t); }
+.newsletter-form { padding: 12px 14px 4px; background: #fff; border-radius: 16px; box-shadow: 0 1px 2px rgba(3, 61, 64, 0.06); }
+.footer-newsletter { margin-top: 26px; max-width: 380px; }
+.footer-brand .footer-newsletter-title { margin: 0 0 10px; color: #fff; font: 700 1.1rem var(--display); }
+
 /* ---------- Para quién es ---------- */
 .segments { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 18px; }
 .segment h3 { display: inline-block; font-size: 1.8rem; margin-bottom: 12px; background: linear-gradient(var(--mint), var(--mint)) no-repeat 0 88% / 100% 0.34em; }
@@ -723,7 +742,7 @@ footer.band-dark { padding: 64px 0 34px; font-size: 0.92rem; background: var(--t
 }
 
 @media (max-width: 960px) {
-  .problem-grid, .faq-grid, .diagnostic-grid, .course { grid-template-columns: 1fr; }
+  .problem-grid, .faq-grid, .diagnostic-grid, .course, .newsletter { grid-template-columns: 1fr; }
   .problem-grid, .faq-grid, .diagnostic-grid { gap: 48px; }
   .course { gap: 30px; }
   .services { grid-template-columns: 1fr 1fr; }
@@ -763,7 +782,8 @@ footer.band-dark { padding: 64px 0 34px; font-size: 0.92rem; background: var(--t
   .services { grid-template-columns: 1fr; }
   .service, .service:nth-child(4), .service:nth-child(5) { grid-column: auto; }
   .card { padding: 24px; }
-  .course { padding: 24px; }
+  .course, .newsletter { padding: 24px; }
+  .newsletter { gap: 22px; }
   .why-grid { grid-template-columns: 1fr; }
   .compare-close .button, .packages-cta .button, .final-cta .button { width: 100%; }
   details { padding: 0 18px; }

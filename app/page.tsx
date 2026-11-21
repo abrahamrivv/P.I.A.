@@ -1,6 +1,7 @@
 "use client";
 
 import { CSSProperties, FormEvent, Fragment, ReactNode, useEffect, useState } from "react";
+import Script from "next/script";
 
 const signals = [
   { value: "44%", text: "de las PyMEs mexicanas probó IA; solo 19% la usa de forma sistemática.", source: "(Endeavor México, 2026)" },
@@ -67,8 +68,8 @@ const fitNo = ["buscas resultados sin que nadie de tu lado revise y apruebe", "q
 
 const packages = [
   { name: "Arranque", tag: "el más elegido", for: "para cuando quieres probar con un frente.", text: "Un servicio montado y operando durante 30 días, con línea base y reporte." },
-  { name: "Motor de marketing", for: "para cuando quieres varios frentes a la vez.", text: "Contenido, anuncios, chatbot y web trabajando juntos, con consultor asignado." },
-  { name: "Partner de IA", for: "para cuando quieres crecer de forma continua.", text: "Operación mensual y un frente nuevo cada trimestre." },
+  { name: "Motor", for: "para cuando quieres varios frentes a la vez.", text: "Contenido, anuncios, chatbot y web trabajando juntos, con consultor asignado." },
+  { name: "Partner", for: "para cuando quieres crecer de forma continua.", text: "Operación mensual y un frente nuevo cada trimestre." },
 ];
 
 const faqs = [
@@ -90,6 +91,13 @@ const navLinks = [
 ];
 
 const COURSE_URL = "https://youtu.be/PtZBSN1W91Y?si=gCVEcwfEWGdoefOG";
+
+// beehiiv inline form "Digitalizados · Formulario en posts (web)" (publication DIGITALIZADOS)
+const BEEHIIV_FORM_URL = "https://subscribe-forms.beehiiv.com/b134c532-6667-49d8-a6c2-ea0934d84aa9";
+
+function NewsletterForm() {
+  return <iframe className="beehiiv-embed" src={BEEHIIV_FORM_URL} title="Suscríbete al newsletter de Digitalizados" data-test-id="beehiiv-embed" frameBorder="0" scrolling="no" loading="lazy" />;
+}
 
 const ICONS: Record<string, ReactNode> = {
   content: <><path d="M4 20h4L19 9l-4-4L4 16v4z" /><path d="M13.5 6.5l4 4" /></>,
@@ -421,6 +429,14 @@ export default function Home() {
               <p>{r.text}</p>
             </article>)}
           </div>
+          <article className="card newsletter" data-reveal>
+            <div>
+              <p className="eyebrow">Newsletter</p>
+              <h3>Recibe Digitalizados gratis</h3>
+              <p>IA y tecnología emergente en 5 minutos, directo a tu correo.</p>
+            </div>
+            <div className="newsletter-form"><NewsletterForm /></div>
+          </article>
           <article className="card course on-dark" data-reveal>
             <div>
               <Icon name="play" />
@@ -543,7 +559,11 @@ export default function Home() {
       <div className="shell footer-top">
         <div className="footer-brand">
           <a className="brand" href="#inicio" aria-label="Digitalizados, inicio"><img src="/dgt-logo.png" alt="Digitalizados" width="1188" height="685" loading="lazy" /></a>
-          <p>AI-powered Marketing para PyMEs y startups.</p>
+          <p>Tu departamento de marketing, pero a una fracción del costo</p>
+          <div className="footer-newsletter">
+            <p className="footer-newsletter-title">Recibe Digitalizados gratis</p>
+            <div className="newsletter-form"><NewsletterForm /></div>
+          </div>
         </div>
         <nav className="footer-links" aria-label="Enlaces del pie de página">
           <a href="#que-hacemos">Qué hacemos</a>
@@ -562,5 +582,6 @@ export default function Home() {
         <p>© 2026 Digitalizados</p>
       </div>
     </footer>
+    <Script src="https://subscribe-forms.beehiiv.com/embed.js" strategy="lazyOnload" />
   </>;
 }
