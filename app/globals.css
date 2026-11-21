@@ -654,6 +654,9 @@ details p { margin: -4px 40px 22px 0; color: var(--m); }
 .success h3 { margin: 25px 0 0; font-size: 2.2rem; color: var(--teal); }
 .success button { margin-top: 20px; background: none; border: 0; text-decoration: underline; cursor: pointer; }
 
+.tally-card { padding: 30px 30px 14px; }
+.tally-card iframe { display: block; width: 100%; border: 0; }
+
 /* ---------- CTA final ---------- */
 .final-cta { position: relative; overflow: hidden; padding: clamp(100px, 13vw, 160px) 0; text-align: center; }
 .final-cta .shell { position: relative; z-index: 1; }
@@ -788,7 +791,7 @@ footer.band-dark { padding: 64px 0 34px; font-size: 0.92rem; background: var(--t
   .compare-close .button, .packages-cta .button, .final-cta .button { width: 100%; }
   details { padding: 0 18px; }
   details p { margin-right: 0; }
-  .lead-form { padding: 24px 20px; }
+  .lead-form, .tally-card { padding: 22px 18px 8px; }
   .form-row { grid-template-columns: 1fr; gap: 0; }
   .footer-links { justify-content: flex-start; }
   .footer-bottom { flex-direction: column; }

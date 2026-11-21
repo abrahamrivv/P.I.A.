@@ -1,6 +1,6 @@
 "use client";
 
-import { CSSProperties, FormEvent, Fragment, ReactNode, useEffect, useState } from "react";
+import { CSSProperties, Fragment, ReactNode, useEffect, useState } from "react";
 import Script from "next/script";
 
 const signals = [
@@ -95,6 +95,15 @@ const COURSE_URL = "https://youtu.be/PtZBSN1W91Y?si=gCVEcwfEWGdoefOG";
 // beehiiv inline form "Digitalizados · Formulario en posts (web)" (publication DIGITALIZADOS)
 const BEEHIIV_FORM_URL = "https://subscribe-forms.beehiiv.com/b134c532-6667-49d8-a6c2-ea0934d84aa9";
 
+// Tally form "Escala tu empresa con Marketing IA"
+const TALLY_FORM_SRC = "https://tally.so/embed/gb9MO1?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1";
+
+function loadTallyEmbeds() {
+  const tally = (window as unknown as { Tally?: { loadEmbeds: () => void } }).Tally;
+  if (tally) tally.loadEmbeds();
+  else document.querySelectorAll<HTMLIFrameElement>("iframe[data-tally-src]:not([src])").forEach((f) => { f.src = f.dataset.tallySrc ?? ""; });
+}
+
 function NewsletterForm() {
   return <iframe className="beehiiv-embed" src={BEEHIIV_FORM_URL} title="Suscríbete al newsletter de Digitalizados" data-test-id="beehiiv-embed" frameBorder="0" scrolling="no" loading="lazy" />;
 }
@@ -123,7 +132,7 @@ function Icon({ name }: { name: string }) {
 }
 
 function Cta({ children, className = "" }: { children: ReactNode; className?: string }) {
-  return <a className={`button ${className}`} href="#diagnostico"><span className="label">{children}</span><span aria-hidden="true">↗</span></a>;
+  return <a className={`button ${className}`} href="#diagnostico"><span className="label">{children}</span></a>;
 }
 
 /** Splits a heading into word spans (with an optional emphasised tail) so words can animate in one by one. */
@@ -141,11 +150,6 @@ const clamp = (v: number) => Math.min(1, Math.max(0, v));
 const NUM = /^([^\d]*)([\d.]+)(.*)$/;
 
 export default function Home() {
-  const [sent, setSent] = useState(false);
-  const [formStep, setFormStep] = useState(1);
-  const [firstStepData, setFirstStepData] = useState<Record<string, string>>({});
-  const [submitting, setSubmitting] = useState(false);
-  const [formError, setFormError] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -263,19 +267,6 @@ export default function Home() {
     return () => cleanups.forEach((fn) => fn());
   }, []);
 
-  async function submit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const currentData = Object.fromEntries(new FormData(e.currentTarget).entries()) as Record<string, string>;
-    if (formStep === 1) { setFirstStepData(currentData); setFormStep(2); setFormError(""); return; }
-    setSubmitting(true); setFormError("");
-    try {
-      const response = await fetch("/api/leads", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...firstStepData, ...currentData }) });
-      if (!response.ok) throw new Error("No pudimos guardar tu solicitud.");
-      setSent(true);
-    } catch { setFormError("No pudimos enviar tus datos. Inténtalo de nuevo en un momento."); }
-    finally { setSubmitting(false); }
-  }
-
   return <>
     <header className="nav-wrap band-dark">
       <nav className="nav shell" aria-label="Navegación principal">
@@ -283,7 +274,7 @@ export default function Home() {
         <div id="menu" className={`nav-links ${menuOpen ? "open" : ""}`}>
           {navLinks.map(([href, label]) => <a key={href} href={href} onClick={() => setMenuOpen(false)}>{label}</a>)}
         </div>
-        <Cta className="nav-cta">Diagnóstico gratis</Cta>
+        <Cta className="nav-cta">Agenda una llamada</Cta>
         <button className="menu-toggle" type="button" aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"} aria-expanded={menuOpen} aria-controls="menu" onClick={() => setMenuOpen((o) => !o)}><span /><span /><span /></button>
       </nav>
       <span className="nav-progress" aria-hidden="true" />
@@ -302,7 +293,7 @@ export default function Home() {
             {team.map((t, i) => <span className="chip" key={t.name} style={{ "--i": i, "--fx": t.fx, "--fy": t.fy, "--fr": t.fr } as CSSProperties}><Glyph name={t.icon} />{t.name}</span>)}
           </div>
           <div className="hero-actions rise" style={{ animationDelay: "650ms" }}>
-            <Cta>Agendar diagnóstico gratis <span className="nw">(20 min)</span></Cta>
+            <Cta>Agenda una llamada</Cta>
           </div>
         </div>
       </section>
@@ -413,7 +404,7 @@ export default function Home() {
 
           <div className="card compare-close" data-reveal>
             <p>Si ya tienes un equipo de marketing completo y funcionando, probablemente no nos necesitas. Si tienes a una persona saturada o a nadie, esta es la forma más rápida de tener un departamento entero.</p>
-            <Cta>Agendar diagnóstico gratis</Cta>
+            <Cta>Agenda una llamada</Cta>
           </div>
         </div>
       </section>
@@ -516,30 +507,9 @@ export default function Home() {
               {["Sin compromiso", "Sin preparación técnica", "Sales con un siguiente paso claro."].map((b, i) => <li key={b} data-reveal style={delay(i + 3, 90)}><Icon name="check" />{b}</li>)}
             </ul>
           </div>
-          <form onSubmit={submit} className="lead-form" data-reveal style={delay(1, 120)}>
-            {sent ? <div className="success" role="status"><span>✓</span><h3>Solicitud recibida.</h3><p>Gracias. Te contactaremos para coordinar tu diagnóstico de 20 minutos.</p><button type="button" onClick={() => { setSent(false); setFormStep(1); }}>Enviar otra solicitud</button></div> : <>
-              <div className="form-progress" aria-label={`Paso ${formStep} de 2`}><span>{formStep}/2</span><div><i style={{ width: formStep === 1 ? "50%" : "100%" }} /></div></div>
-              <fieldset hidden={formStep !== 1} disabled={formStep !== 1}>
-                <legend>Datos de contacto</legend>
-                <div className="form-row"><label>Nombre <b>*</b><input name="nombre" required autoComplete="given-name" /></label><label>Apellidos <b>*</b><input name="apellidos" required autoComplete="family-name" /></label></div>
-                <label>Correo empresarial <b>*</b><input type="email" name="correo" required autoComplete="email" /></label>
-                <label>Rol <b>*</b><select name="rol" required defaultValue=""><option value="" disabled>Selecciona una opción</option><option>Dueño/a o fundador/a</option><option>Dirección general</option><option>Operaciones</option><option>Ventas</option><option>Marketing</option><option>Tecnología</option><option>Otro</option></select></label>
-                <label>Número de teléfono <b>*</b><div className="phone-field"><select name="pais" aria-label="Código de país" defaultValue="+52"><option value="+52">MX +52</option><option value="+1">US +1</option><option value="+57">CO +57</option><option value="+54">AR +54</option><option value="+56">CL +56</option><option value="+51">PE +51</option><option value="otro">Otro</option></select><input type="tel" name="telefono" required autoComplete="tel" inputMode="tel" /></div></label>
-                <label>Tamaño de tu empresa (# empleados) <b>*</b><input type="number" min="1" name="tamano" required inputMode="numeric" /></label>
-                <button className="submit" type="submit">Siguiente <span>→</span></button>
-              </fieldset>
-              <fieldset hidden={formStep !== 2} disabled={formStep !== 2}>
-                <legend>Sobre tu empresa</legend>
-                <label>Nombre de la empresa <b>*</b><input name="empresa" required autoComplete="organization" /></label>
-                <label>Perfil de LinkedIn <b>*</b><input type="url" name="linkedin" required placeholder="https://linkedin.com/in/..." /></label>
-                <label>¿Cómo te enteraste de nosotros? <b>*</b><input name="origen" required /></label>
-                <label>¿Cuál es tu mayor reto operativo hoy? <b>*</b><select name="reto" required defaultValue=""><option value="" disabled>Selecciona una opción</option><option>Atención al cliente</option><option>Ventas y cotizaciones</option><option>Contenido y marketing</option><option>Administración</option><option>Otro</option></select></label>
-                {formError && <p className="form-error" role="alert">{formError}</p>}
-                <div className="form-actions"><button className="back-button" type="button" onClick={() => setFormStep(1)}>Anterior</button><button className="submit" type="submit" disabled={submitting}>{submitting ? "Enviando..." : "Agendar mi diagnóstico"} <span>↗</span></button></div>
-              </fieldset>
-              <small>Al enviar aceptas que te contactemos y nuestro <a href="#">aviso de privacidad</a>.</small>
-            </>}
-          </form>
+          <div className="lead-form tally-card" data-reveal style={delay(1, 120)}>
+            <iframe data-tally-src={TALLY_FORM_SRC} loading="lazy" width="100%" height="780" frameBorder="0" marginHeight={0} marginWidth={0} title="Escala tu empresa con Marketing IA" />
+          </div>
         </div>
       </section>
 
@@ -549,7 +519,7 @@ export default function Home() {
         <div className="shell">
           <h2 className="split" data-reveal><Split text="Tu competencia ya probó la IA." em="La diferencia es quién la pone a vender." /></h2>
           <p data-reveal style={delay(3, 120)}>Empieza con 20 minutos. Sin costo.</p>
-          <div data-reveal style={delay(4, 120)}><Cta>Agendar diagnóstico gratis</Cta></div>
+          <div data-reveal style={delay(4, 120)}><Cta>Agenda una llamada</Cta></div>
         </div>
       </section>
     </main>
@@ -583,5 +553,6 @@ export default function Home() {
       </div>
     </footer>
     <Script src="https://subscribe-forms.beehiiv.com/embed.js" strategy="lazyOnload" />
+    <Script src="https://tally.so/widgets/embed.js" strategy="lazyOnload" onLoad={loadTallyEmbeds} onError={loadTallyEmbeds} />
   </>;
 }
